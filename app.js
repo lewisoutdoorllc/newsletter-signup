@@ -35,16 +35,26 @@ app.post("/", function (req, res) {
 
   const options = {
     method: "POST",
-    auth: "cody:3dc2874ef7b9854e28de1d8309c84024-us5",
+    auth: "cody:a3dc2874ef7b9854e28de1d8309c84024-us5",
   }
 
   const request = https.request(url, options, function (response) {
+
+    if (response.statusCode === 200) {
+        res.sendFile(__dirname + "/success.html");
+    } else
+    res.sendFile(__dirname + "/failure.html");
+
     response.on("data", function (data) {
       console.log(JSON.parse(data));
     })
   })
   request.write(jsonData);
   request.end();
+});
+
+app.post("/failure", function(req, res) {
+    res.redirect("/");
 });
 
 app.listen(process.env.PORT || 3000, function () {
